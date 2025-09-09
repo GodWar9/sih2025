@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { notifications as mockNotifications } from '@/lib/data';
 import type { Notification as NotificationType } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,12 +10,28 @@ import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 
 export default function NotificationsPage() {
-  const [notifications, setNotifications] = useState<NotificationType[]>(mockNotifications);
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
+
+  useEffect(() => {
+    const storedNotifications = localStorage.getItem('classpal-notifications');
+    if (storedNotifications) {
+      // When retrieving from localStorage, dates are strings, so we need to parse them back to Date objects.
+      const parsedNotifications = JSON.parse(storedNotifications).map((n: NotificationType) => ({
+        ...n,
+        timestamp: new Date(n.timestamp),
+      }));
+      setNotifications(parsedNotifications);
+    } else {
+      setNotifications(mockNotifications);
+    }
+  }, []);
 
   const markAsRead = (id: string) => {
-    setNotifications(
-      notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
+    const updatedNotifications = notifications.map((n) =>
+      n.id === id ? { ...n, read: true } : n
     );
+    setNotifications(updatedNotifications);
+    localStorage.setItem('classpal-notifications', JSON.stringify(updatedNotifications));
   };
   
   const unreadCount = notifications.filter(n => !n.read).length;

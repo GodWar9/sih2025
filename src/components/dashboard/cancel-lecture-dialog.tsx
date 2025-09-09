@@ -21,11 +21,12 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import type { Lecture } from '@/lib/types';
+import type { Lecture, Notification } from '@/lib/types';
 import { getCancellationNotifications } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, UserCheck } from 'lucide-react';
 import type { LectureCancellationNotificationOutput } from '@/ai/flows/lecture-cancellation-notification';
+import { notifications as mockNotifications } from '@/lib/data';
 
 type CancelLectureDialogProps = {
   lecture: Lecture;
@@ -51,6 +52,21 @@ export function CancelLectureDialog({ lecture }: CancelLectureDialogProps) {
         setResult(response.data);
         setIsResultOpen(true);
         setOpen(false);
+
+        // Create and store the notification
+        const newNotification: Notification = {
+            id: `N${Date.now()}`,
+            title: 'Lecture Canceled',
+            description: `Your lecture "${lecture.subject}" on ${lecture.day} at ${lecture.startTime} has been canceled.`,
+            read: false,
+            timestamp: new Date(),
+        };
+
+        const storedNotifications = JSON.parse(localStorage.getItem('classpal-notifications') || 'null');
+        const currentNotifications = storedNotifications || mockNotifications;
+        const updatedNotifications = [newNotification, ...currentNotifications];
+        localStorage.setItem('classpal-notifications', JSON.stringify(updatedNotifications));
+        
     } else {
       const errorMessage = typeof response.error === 'object' 
         ? Object.values(response.error).flat().join(', ')
