@@ -4,9 +4,14 @@ import {
   lectureCancellationNotification,
   type LectureCancellationNotificationInput,
 } from '@/ai/flows/lecture-cancellation-notification';
+import {
+  checkAvailability as checkAvailabilityFlow,
+  type CheckAvailabilityInput,
+} from '@/ai/flows/check-availability';
+
 import { z } from 'zod';
 
-const actionSchema = z.object({
+const cancelActionSchema = z.object({
   lectureDetails: z.string().min(1, { message: 'Lecture details are required.' }),
   studentList: z.array(z.object({
     studentId: z.string(),
@@ -18,7 +23,7 @@ const actionSchema = z.object({
 export async function getCancellationNotifications(
   input: LectureCancellationNotificationInput
 ) {
-  const validation = actionSchema.safeParse(input);
+  const validation = cancelActionSchema.safeParse(input);
   if (!validation.success) {
     return { success: false, error: validation.error.flatten().fieldErrors };
   }
@@ -31,4 +36,29 @@ export async function getCancellationNotifications(
     const errorMessage = e instanceof Error ? e.message : 'An unexpected error occurred while running the AI flow.';
     return { success: false, error: { _form: [errorMessage] } };
   }
+}
+
+const checkAvailabilitySchema = z.object({
+  room: z.string().optional(),
+  instructor: z.string().optional(),
+}).refine(data => !!data.room || !!data.instructor, {
+  message: 'Either room or instructor must be provided.'
+});
+
+export async function checkAvailability(
+  input: CheckAvailabilityInput
+) {
+    const validation = checkAvailabilitySchema.safeParse(input);
+    if (!validation.success) {
+        return { success: false, error: validation.error.flatten().fieldErrors };
+    }
+
+    try {
+        const result = await checkAvailabilityFlow(validation.data);
+        return { success: true, data: result };
+    } catch (e) {
+        console.error('Genkit Flow Error:', e);
+        const errorMessage = e instanceof Error ? e.message : 'An unexpected error occurred while running the AI flow.';
+        return { success: false, error: { _form: [errorMessage] } };
+    }
 }

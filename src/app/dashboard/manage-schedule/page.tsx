@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { CancelLectureDialog } from '@/components/dashboard/cancel-lecture-dialog';
+import { CheckAvailabilityDialog } from '@/components/dashboard/check-availability-dialog';
+import { Button } from '@/components/ui/button';
 
 export default function ManageSchedulePage() {
   const { user } = useAuth();
@@ -38,9 +40,12 @@ export default function ManageSchedulePage() {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold tracking-tight font-headline">Manage Schedule</h1>
       <Card>
-        <CardHeader>
-            <CardTitle>Your Lectures</CardTitle>
-            <CardDescription>Review and manage your upcoming lectures. You can cancel a lecture to notify students.</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Your Lectures</CardTitle>
+              <CardDescription>Review and manage your upcoming lectures. You can cancel a lecture to notify students.</CardDescription>
+            </div>
+             <CheckAvailabilityDialog />
         </CardHeader>
         <CardContent>
           <Table>
