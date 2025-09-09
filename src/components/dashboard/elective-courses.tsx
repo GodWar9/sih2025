@@ -73,13 +73,13 @@ export function ElectiveCourses({ allLectures, allCourses, studentLectures, stud
             <CardContent>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {availableElectives.map(elective => (
-                        <div key={elective.id} className="flex items-center justify-between rounded-lg border p-4">
-                            <div>
+                        <div key={elective.id} className="relative rounded-lg border p-4">
+                            <div className="flex-1">
                                 <p className="font-semibold">{elective.subject}</p>
                                 <p className="text-sm text-muted-foreground">{elective.teacher}</p>
                                 <p className="text-xs text-muted-foreground">{elective.day}, {elective.startTime} - {elective.endTime}</p>
                             </div>
-                            <Button size="sm" onClick={() => handleEnroll(elective)}>
+                            <Button size="sm" onClick={() => handleEnroll(elective)} className="absolute top-4 right-4">
                                 <PlusCircle className="mr-2 h-4 w-4" /> Add Elective
                             </Button>
                         </div>
