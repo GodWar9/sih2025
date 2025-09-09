@@ -80,7 +80,7 @@ export function ElectiveCourses({ allLectures, allCourses, studentLectures, stud
                                 <p className="text-xs text-muted-foreground">{elective.day}, {elective.startTime} - {elective.endTime}</p>
                             </div>
                             <Button size="sm" onClick={() => handleEnroll(elective)}>
-                                <PlusCircle className="mr-2 h-4 w-4" /> Enroll
+                                <PlusCircle className="mr-2 h-4 w-4" /> Add Elective
                             </Button>
                         </div>
                     ))}
