@@ -1,4 +1,4 @@
-import type { User, Lecture, Notification } from './types';
+import type { User, Lecture, Notification, Course } from './types';
 
 export const users: (User & { password?: string })[] = [
   {
@@ -27,6 +27,17 @@ export const users: (User & { password?: string })[] = [
   },
 ];
 
+export const courses: Course[] = [
+    { id: 'C001', subject: 'Quantum Physics', code: 'PHY301', description: 'Advanced topics in quantum mechanics.', elective: false },
+    { id: 'C002', subject: 'Advanced Algorithms', code: 'CS402', description: 'In-depth study of algorithm design and analysis.', elective: false },
+    { id: 'C003', subject: 'Shakespearean Literature', code: 'ENG210', description: 'A survey of Shakespeare\'s major plays.', elective: true },
+    { id: 'C004', subject: 'Faculty Meeting', code: 'FM001', description: 'Regular faculty meeting.', elective: false },
+    { id: 'C005', subject: 'General Chemistry', code: 'CHEM101', description: 'Fundamental principles of chemistry.', elective: false },
+    { id: 'C006', subject: 'Calculus II', code: 'MATH203', description: 'Continuation of Calculus I.', elective: false },
+    { id: 'C007', subject: 'Introduction to Philosophy', code: 'PHIL101', description: 'Exploring fundamental questions of existence, knowledge, values, reason, mind, and language.', elective: true },
+    { id: 'C008', subject: 'World History: 20th Century', code: 'HIST205', description: 'A study of major global events and transformations in the 20th century.', elective: true },
+];
+
 export const lectures: Lecture[] = [
   {
     id: 'L001',
@@ -45,6 +56,7 @@ export const lectures: Lecture[] = [
       { studentId: 'S002', attendanceRate: 0.95, missedSessions: 0 },
       { studentId: 'S003', attendanceRate: 0.7, missedSessions: 3 },
     ],
+    elective: false,
   },
   {
     id: 'L002',
@@ -62,6 +74,7 @@ export const lectures: Lecture[] = [
       { studentId: '3', attendanceRate: 1.0, missedSessions: 0 },
       { studentId: 'S004', attendanceRate: 0.88, missedSessions: 2 },
     ],
+    elective: false,
   },
   {
     id: 'L003',
@@ -78,6 +91,7 @@ export const lectures: Lecture[] = [
     students: [
       { studentId: '3', attendanceRate: 0.92, missedSessions: 1 },
     ],
+    elective: true,
   },
   {
     id: 'L004',
@@ -92,6 +106,7 @@ export const lectures: Lecture[] = [
     status: 'confirmed',
     forRoles: ['admin', 'teacher'],
     students: [],
+    elective: false,
   },
   {
     id: 'L005',
@@ -109,6 +124,7 @@ export const lectures: Lecture[] = [
       { studentId: '3', attendanceRate: 0.98, missedSessions: 0 },
       { studentId: 'S005', attendanceRate: 0.6, missedSessions: 4 },
     ],
+    elective: false,
   },
    {
     id: 'L006',
@@ -126,6 +142,7 @@ export const lectures: Lecture[] = [
       { studentId: '3', attendanceRate: 0.95, missedSessions: 1 },
       { studentId: 'S002', attendanceRate: 0.99, missedSessions: 0 },
     ],
+    elective: false,
   },
 ];
 

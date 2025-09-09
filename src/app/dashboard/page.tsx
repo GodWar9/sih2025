@@ -6,27 +6,35 @@ import { lectures as allLectures, users } from '@/lib/data';
 import type { Lecture } from '@/lib/types';
 import { useState, useMemo } from 'react';
 import { useAuth } from '@/hooks/use-auth';
+import { ElectiveCourses } from '@/components/dashboard/elective-courses';
 
 export default function TimetablePage() {
   const { user } = useAuth();
   const [filters, setFilters] = useState({ subject: '', teacher: '', day: 'all' });
+  // We'll manage lectures in state now to allow for dynamic additions
+  const [lectures, setLectures] = useState<Lecture[]>(allLectures);
 
   const teachers = useMemo(() => {
     const teacherSet = new Set<string>();
-    allLectures.forEach(l => teacherSet.add(l.teacher));
+    lectures.forEach(l => teacherSet.add(l.teacher));
     return Array.from(teacherSet);
-  }, []);
+  }, [lectures]);
   
   const subjects = useMemo(() => {
     const subjectSet = new Set<string>();
-    allLectures.forEach(l => subjectSet.add(l.subject));
+    lectures.forEach(l => subjectSet.add(l.subject));
     return Array.from(subjectSet);
-  }, []);
+  }, [lectures]);
 
   const lecturesForUser = useMemo(() => {
     if (!user) return [];
-    return allLectures.filter(lecture => lecture.forRoles.includes(user.role));
-  }, [user]);
+    // If student, show lectures they are enrolled in.
+    if (user.role === 'student') {
+        return lectures.filter(l => l.students.some(s => s.studentId === user.id) || l.forRoles.includes(user.role));
+    }
+    // For teachers and admins, show lectures based on their role
+    return lectures.filter(lecture => lecture.forRoles.includes(user.role));
+  }, [user, lectures]);
 
   const filteredLectures = useMemo(() => {
     return lecturesForUser.filter(lecture => {
@@ -36,6 +44,19 @@ export default function TimetablePage() {
       return subjectMatch && teacherMatch && dayMatch;
     });
   }, [filters, lecturesForUser]);
+  
+  const addLectureToStudent = (lecture: Lecture) => {
+    if (!user) return;
+    // This is a mock update. In a real app, you'd send this to a server.
+    const updatedLectures = lectures.map(l => {
+        if (l.id === lecture.id) {
+            const newStudents = [...l.students, { studentId: user.id, attendanceRate: 1, missedSessions: 0 }];
+            return { ...l, students: newStudents };
+        }
+        return l;
+    });
+    setLectures(updatedLectures);
+  }
 
   return (
     <div className="space-y-6">
@@ -49,6 +70,14 @@ export default function TimetablePage() {
         />
       </div>
       <Timetable lectures={filteredLectures} />
+
+      {user?.role === 'student' && (
+        <ElectiveCourses 
+            allLectures={lectures} 
+            studentLectures={lecturesForUser}
+            onEnroll={addLectureToStudent}
+        />
+      )}
     </div>
   );
 }

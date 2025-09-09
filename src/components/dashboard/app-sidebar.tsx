@@ -18,7 +18,9 @@ import {
   Shield,
   LogOut,
   GraduationCap,
-  Briefcase
+  Briefcase,
+  Book,
+  User as UserIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -31,11 +33,13 @@ const navItems = {
   ],
   teacher: [
     { href: '/dashboard', label: 'Timetable', icon: CalendarDays },
+    { href: '/dashboard/courses', label: 'Manage Courses', icon: Book },
     { href: '/dashboard/manage-schedule', label: 'Manage Schedule', icon: Briefcase },
     { href: '/dashboard/notifications', label: 'Notifications', icon: Bell },
   ],
   admin: [
     { href: '/dashboard', label: 'Timetable', icon: CalendarDays },
+    { href: '/dashboard/courses', label: 'Manage Courses', icon: Book },
     { href: '/dashboard/manage-schedule', label: 'Manage Schedule', icon: Briefcase },
     { href: '/dashboard/notifications', label: 'Notifications', icon: Bell },
   ],

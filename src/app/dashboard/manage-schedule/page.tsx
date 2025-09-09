@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@/hooks/use-auth';
-import { lectures as allLectures } from '@/lib/data';
+import { lectures as allLectures, users as allUsers, courses as allCourses } from '@/lib/data';
 import type { Lecture } from '@/lib/types';
 import { useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { CancelLectureDialog } from '@/components/dashboard/cancel-lecture-dialog';
 import { CheckAvailabilityDialog } from '@/components/dashboard/check-availability-dialog';
-import { Button } from '@/components/ui/button';
+import { ScheduleLectureDialog } from '@/components/dashboard/schedule-lecture-dialog';
 
 export default function ManageSchedulePage() {
   const { user } = useAuth();
@@ -22,6 +22,11 @@ export default function ManageSchedulePage() {
     }
     return [];
   }, [user]);
+
+  const teachers = useMemo(() => allUsers.filter(u => u.role === 'teacher'), []);
+  const courses = useMemo(() => allCourses, []);
+  const classrooms = useMemo(() => Array.from(new Set(allLectures.map(l => l.classroom))), []);
+
 
   if (user?.role === 'student') {
     return (
@@ -45,7 +50,16 @@ export default function ManageSchedulePage() {
               <CardTitle>Your Lectures</CardTitle>
               <CardDescription>Review and manage your upcoming lectures. You can cancel a lecture to notify students.</CardDescription>
             </div>
+            <div className="flex gap-2">
              <CheckAvailabilityDialog />
+             {user?.role === 'admin' && (
+                <ScheduleLectureDialog 
+                    teachers={teachers} 
+                    courses={courses} 
+                    classrooms={classrooms}
+                />
+             )}
+            </div>
         </CardHeader>
         <CardContent>
           <Table>

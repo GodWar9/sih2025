@@ -6,6 +6,14 @@ export type User = {
   avatarUrl: string;
 };
 
+export type Course = {
+  id: string;
+  subject: string;
+  code: string;
+  description: string;
+  elective: boolean;
+};
+
 export type Lecture = {
   id: string;
   subject: string;
@@ -23,6 +31,7 @@ export type Lecture = {
     attendanceRate: number;
     missedSessions: number;
   }[];
+  elective: boolean;
 };
 
 export type Notification = {

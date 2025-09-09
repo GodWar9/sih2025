@@ -53,7 +53,7 @@ export function TimetableFilters({ filters, setFilters, teachers, subjects }: Fi
       </Select>
       </div>
 
-      <div className="flex items-center gap-1 rounded-md bg-muted p-1">
+      <div className="flex items-center gap-1 rounded-md bg-muted p-1 mt-2 sm:mt-0">
         {daysOfWeek.map(day => (
             <Button
                 key={day}

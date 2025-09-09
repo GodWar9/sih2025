@@ -9,6 +9,11 @@ import {
   type CheckAvailabilityInput,
 } from '@/ai/flows/check-availability';
 
+import {
+  scheduleLecture as scheduleLectureFlow,
+  type ScheduleLectureInput,
+} from '@/ai/flows/schedule-lecture';
+
 import { z } from 'zod';
 
 const cancelActionSchema = z.object({
@@ -55,6 +60,30 @@ export async function checkAvailability(
 
     try {
         const result = await checkAvailabilityFlow(validation.data);
+        return { success: true, data: result };
+    } catch (e) {
+        console.error('Genkit Flow Error:', e);
+        const errorMessage = e instanceof Error ? e.message : 'An unexpected error occurred while running the AI flow.';
+        return { success: false, error: { _form: [errorMessage] } };
+    }
+}
+
+const scheduleLectureSchema = z.object({
+    subject: z.string().min(1, { message: 'Subject is required.' }),
+    teacher: z.string().min(1, { message: 'Teacher is required.' }),
+    classroom: z.string().min(1, { message: 'Classroom is required.' }),
+});
+
+export async function scheduleLecture(
+    input: ScheduleLectureInput
+) {
+    const validation = scheduleLectureSchema.safeParse(input);
+    if (!validation.success) {
+        return { success: false, error: validation.error.flatten().fieldErrors };
+    }
+
+    try {
+        const result = await scheduleLectureFlow(validation.data);
         return { success: true, data: result };
     } catch (e) {
         console.error('Genkit Flow Error:', e);
