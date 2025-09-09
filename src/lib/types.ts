@@ -4,6 +4,7 @@ export type User = {
   email: string;
   role: 'admin' | 'teacher' | 'student';
   avatarUrl: string;
+  department: 'Computer Science' | 'Physics' | 'English' | 'General';
 };
 
 export type Course = {
@@ -12,6 +13,7 @@ export type Course = {
   code: string;
   description: string;
   elective: boolean;
+  department: 'Computer Science' | 'Physics' | 'English' | 'History' | 'Philosophy' | 'General';
 };
 
 export type Lecture = {

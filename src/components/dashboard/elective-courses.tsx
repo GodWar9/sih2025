@@ -1,8 +1,7 @@
 'use client'
 
-import { useState, useMemo } from 'react';
-import { lectures as allLecturesData, courses as allCoursesData } from '@/lib/data';
-import type { Lecture } from '@/lib/types';
+import { useMemo } from 'react';
+import type { Lecture, Course } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
@@ -10,7 +9,9 @@ import { useToast } from '@/hooks/use-toast';
 
 type ElectiveCoursesProps = {
     allLectures: Lecture[];
+    allCourses: Course[];
     studentLectures: Lecture[];
+    studentDepartment: string;
     onEnroll: (lecture: Lecture) => void;
 };
 
@@ -24,18 +25,23 @@ const doTimesConflict = (lectureA: Lecture, lectureB: Lecture) => {
     return startA < endB && endA > startB;
 }
 
-export function ElectiveCourses({ allLectures, studentLectures, onEnroll }: ElectiveCoursesProps) {
+export function ElectiveCourses({ allLectures, allCourses, studentLectures, studentDepartment, onEnroll }: ElectiveCoursesProps) {
     const { toast } = useToast();
 
     const availableElectives = useMemo(() => {
         // Get IDs of courses student is already enrolled in
         const enrolledCourseCodes = new Set(studentLectures.map(l => l.code));
+        
+        // Get course codes for the student's department
+        const departmentCourseCodes = new Set(allCourses.filter(c => c.department === studentDepartment && c.elective).map(c => c.code));
 
-        // Filter for electives not already enrolled in
+        // Filter for electives in the student's department that they are not already enrolled in
         return allLectures.filter(lecture => 
-            lecture.elective && !enrolledCourseCodes.has(lecture.code)
+            lecture.elective && 
+            !enrolledCourseCodes.has(lecture.code) &&
+            departmentCourseCodes.has(lecture.code)
         );
-    }, [allLectures, studentLectures]);
+    }, [allLectures, allCourses, studentLectures, studentDepartment]);
     
     const handleEnroll = (elective: Lecture) => {
         // Check for conflicts
@@ -62,7 +68,7 @@ export function ElectiveCourses({ allLectures, studentLectures, onEnroll }: Elec
         <Card>
             <CardHeader>
                 <CardTitle>Available Electives</CardTitle>
-                <CardDescription>Browse and enroll in elective courses that fit your schedule.</CardDescription>
+                <CardDescription>Browse and enroll in elective courses from your department that fit your schedule.</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

@@ -2,7 +2,7 @@
 
 import { Timetable } from '@/components/dashboard/timetable';
 import { TimetableFilters } from '@/components/dashboard/timetable-filters';
-import { lectures as allLectures, users } from '@/lib/data';
+import { lectures as allLectures, users, courses as allCourses } from '@/lib/data';
 import type { Lecture } from '@/lib/types';
 import { useState, useMemo } from 'react';
 import { useAuth } from '@/hooks/use-auth';
@@ -72,9 +72,11 @@ export default function TimetablePage() {
       <Timetable lectures={filteredLectures} />
 
       {user?.role === 'student' && (
-        <ElectiveCourses 
-            allLectures={lectures} 
+        <ElectiveCourses
+            allLectures={lectures}
+            allCourses={allCourses}
             studentLectures={lecturesForUser}
+            studentDepartment={user.department}
             onEnroll={addLectureToStudent}
         />
       )}

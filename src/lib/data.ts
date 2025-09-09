@@ -8,6 +8,7 @@ export const users: (User & { password?: string })[] = [
     password: 'password',
     role: 'admin',
     avatarUrl: 'https://picsum.photos/seed/admin/100/100',
+    department: 'General',
   },
   {
     id: '2',
@@ -16,6 +17,7 @@ export const users: (User & { password?: string })[] = [
     password: 'password',
     role: 'teacher',
     avatarUrl: 'https://picsum.photos/seed/teacher/100/100',
+    department: 'Physics',
   },
   {
     id: '3',
@@ -24,18 +26,20 @@ export const users: (User & { password?: string })[] = [
     password: 'password',
     role: 'student',
     avatarUrl: 'https://picsum.photos/seed/student/100/100',
+    department: 'Computer Science',
   },
 ];
 
 export const courses: Course[] = [
-    { id: 'C001', subject: 'Quantum Physics', code: 'PHY301', description: 'Advanced topics in quantum mechanics.', elective: false },
-    { id: 'C002', subject: 'Advanced Algorithms', code: 'CS402', description: 'In-depth study of algorithm design and analysis.', elective: false },
-    { id: 'C003', subject: 'Shakespearean Literature', code: 'ENG210', description: 'A survey of Shakespeare\'s major plays.', elective: true },
-    { id: 'C004', subject: 'Faculty Meeting', code: 'FM001', description: 'Regular faculty meeting.', elective: false },
-    { id: 'C005', subject: 'General Chemistry', code: 'CHEM101', description: 'Fundamental principles of chemistry.', elective: false },
-    { id: 'C006', subject: 'Calculus II', code: 'MATH203', description: 'Continuation of Calculus I.', elective: false },
-    { id: 'C007', subject: 'Introduction to Philosophy', code: 'PHIL101', description: 'Exploring fundamental questions of existence, knowledge, values, reason, mind, and language.', elective: true },
-    { id: 'C008', subject: 'World History: 20th Century', code: 'HIST205', description: 'A study of major global events and transformations in the 20th century.', elective: true },
+    { id: 'C001', subject: 'Quantum Physics', code: 'PHY301', description: 'Advanced topics in quantum mechanics.', elective: false, department: 'Physics' },
+    { id: 'C002', subject: 'Advanced Algorithms', code: 'CS402', description: 'In-depth study of algorithm design and analysis.', elective: false, department: 'Computer Science' },
+    { id: 'C003', subject: 'Shakespearean Literature', code: 'ENG210', description: 'A survey of Shakespeare\'s major plays.', elective: true, department: 'English' },
+    { id: 'C004', subject: 'Faculty Meeting', code: 'FM001', description: 'Regular faculty meeting.', elective: false, department: 'General' },
+    { id: 'C005', subject: 'General Chemistry', code: 'CHEM101', description: 'Fundamental principles of chemistry.', elective: false, department: 'Physics' },
+    { id: 'C006', subject: 'Calculus II', code: 'MATH203', description: 'Continuation of Calculus I.', elective: false, department: 'Computer Science' },
+    { id: 'C007', subject: 'Introduction to Philosophy', code: 'PHIL101', description: 'Exploring fundamental questions of existence, knowledge, values, reason, mind, and language.', elective: true, department: 'Philosophy' },
+    { id: 'C008', subject: 'World History: 20th Century', code: 'HIST205', description: 'A study of major global events and transformations in the 20th century.', elective: true, department: 'History' },
+    { id: 'C009', subject: 'Advanced Operating Systems', code: 'CS550', description: 'Advanced concepts in operating systems design and implementation.', elective: true, department: 'Computer Science' },
 ];
 
 export const lectures: Lecture[] = [
@@ -143,6 +147,21 @@ export const lectures: Lecture[] = [
       { studentId: 'S002', attendanceRate: 0.99, missedSessions: 0 },
     ],
     elective: false,
+  },
+  {
+    id: 'L007',
+    subject: 'Advanced Operating Systems',
+    code: 'CS550',
+    teacher: 'Dr. Ben Carter',
+    teacherId: '4',
+    classroom: 'Room 303',
+    day: 'Friday',
+    startTime: '13:00',
+    endTime: '14:30',
+    status: 'confirmed',
+    forRoles: ['admin', 'student'],
+    students: [],
+    elective: true,
   },
 ];
 
