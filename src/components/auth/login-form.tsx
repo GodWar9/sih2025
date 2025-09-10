@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -18,6 +18,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { users } from '@/lib/data';
+import type { User } from '@/lib/types';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email.' }),
@@ -36,6 +37,13 @@ export function LoginForm() {
       password: '',
     },
   });
+
+  const quickLoginUsers = useMemo(() => {
+    const roles: User['role'][] = ['admin', 'teacher', 'student'];
+    return roles.map(role => {
+      return users.find(user => user.role === role);
+    }).filter((user): user is User & { password?: string } => !!user);
+  }, []);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
@@ -102,7 +110,7 @@ export function LoginForm() {
       <div className="space-y-2">
         <p className="text-center text-sm text-muted-foreground">Or quick login as:</p>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-          {users.map((user) => (
+          {quickLoginUsers.map((user) => (
              <Button key={user.id} variant="outline" onClick={() => quickLogin(user.email, user.password)} disabled={isLoading}>
                {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
              </Button>
