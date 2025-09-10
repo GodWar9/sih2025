@@ -68,7 +68,7 @@ export function ElectiveCourses({ allLectures, allCourses, studentLectures, stud
         <Card>
             <CardHeader>
                 <CardTitle>Available Electives</CardTitle>
-                <CardDescription>Browse and enroll in elective courses from your department that fit your schedule.</CardDescription>
+                <CardDescription>Browse and enroll in elective courses from your department.</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
