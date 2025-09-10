@@ -1,6 +1,6 @@
-# Firebase Studio
+# Smart Classroom and Timetable Scheduler
 
-This is a NextJS starter in Firebase Studio.
+
 
 To get started, take a look at src/app/page.tsx.
 
