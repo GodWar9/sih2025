@@ -4,6 +4,7 @@ import type { Lecture } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 type TimetableProps = {
   lectures: Lecture[];
@@ -11,7 +12,7 @@ type TimetableProps = {
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 const timeSlots = [
-  '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
+  '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'
 ];
 
 const colorPalette = [
@@ -57,61 +58,63 @@ export function Timetable({ lectures }: TimetableProps) {
   return (
     <Card className="border-0 bg-transparent shadow-none">
       <CardContent className="p-0">
-        <TooltipProvider>
-            <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] lg:grid-cols-[auto_repeat(5,_1fr)] overflow-x-auto">
-              {/* Header Row */}
-              <div className="sticky left-0 top-0 z-10 hidden bg-card p-2 text-center font-semibold md:block">Time</div>
-              <div className="grid grid-cols-1 md:col-span-1 lg:col-span-5 lg:grid-cols-5">
-                  {daysOfWeek.map((day) => (
-                    <div key={day} className="p-4 text-center font-semibold font-headline border-b border-l">
-                      {day}
-                    </div>
-                  ))}
-              </div>
-
-              {/* Timetable Body */}
-              {timeSlots.map((time, timeIndex) => (
-                <div key={time} className="contents">
-                  <div className={cn("p-2 text-sm text-muted-foreground text-center border-t hidden md:flex items-center justify-center sticky left-0 bg-card", timeIndex > 0 && "border-t")}>
-                    {time}
-                  </div>
-                   <div className="grid grid-cols-1 md:col-span-1 lg:col-span-5 lg:grid-cols-5">
-                      {daysOfWeek.map((day, dayIndex) => (
-                        <div key={`${day}-${time}`} className={cn("p-1 min-h-[80px] md:min-h-[100px] border-l", timeIndex > 0 && "border-t")}>
-                          <div className="grid grid-cols-1 gap-1">
-                            {getLecturesForSlot(day, time).map(lecture => (
-                              <Tooltip key={lecture.id}>
-                                  <TooltipTrigger asChild>
-                                      <div
-                                        style={{ borderLeftColor: getSubjectColor(lecture.subject) }}
-                                        className={cn(
-                                          'cursor-pointer rounded-md bg-secondary/50 p-2 text-xs border-l-4 transition-all hover:bg-secondary',
-                                          lecture.status === 'canceled' && 'opacity-50 line-through'
-                                        )}
-                                      >
-                                        <p className="font-bold truncate">{lecture.subject}</p>
-                                        <p className="text-muted-foreground truncate">{lecture.teacher}</p>
-                                      </div>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <div className="space-y-1 text-sm">
-                                      <p><strong>{lecture.subject}</strong> ({lecture.code})</p>
-                                      <p><strong>Instructor:</strong> {lecture.teacher}</p>
-                                      <p><strong>Room:</strong> {lecture.classroom}</p>
-                                      <p><strong>Time:</strong> {lecture.startTime} - {lecture.endTime}</p>
-                                      <p><strong>Status:</strong> <span className="capitalize">{lecture.status}</span></p>
-                                    </div>
-                                  </TooltipContent>
-                              </Tooltip>
-                            ))}
-                          </div>
+        <ScrollArea className="h-[70vh] w-full">
+            <TooltipProvider>
+                <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] lg:grid-cols-[auto_repeat(5,_1fr)]">
+                  {/* Header Row */}
+                  <div className="sticky top-0 z-10 hidden bg-card p-2 text-center font-semibold md:block">Time</div>
+                  <div className="sticky top-0 z-10 grid grid-cols-5 md:col-span-1 lg:col-span-5">
+                      {daysOfWeek.map((day) => (
+                        <div key={day} className="p-4 text-center font-semibold font-headline border-b border-l bg-card">
+                          {day}
                         </div>
                       ))}
+                  </div>
+
+                  {/* Timetable Body */}
+                  {timeSlots.map((time, timeIndex) => (
+                    <div key={time} className="contents">
+                      <div className={cn("p-2 text-sm text-muted-foreground text-center border-t hidden md:flex items-center justify-center sticky left-0 bg-card", timeIndex > 0 && "border-t")}>
+                        {time}
+                      </div>
+                       <div className="grid grid-cols-1 md:col-span-1 lg:col-span-5 lg:grid-cols-5">
+                          {daysOfWeek.map((day, dayIndex) => (
+                            <div key={`${day}-${time}`} className={cn("p-1 min-h-[80px] md:min-h-[100px] border-l", timeIndex > 0 && "border-t")}>
+                              <div className="grid grid-cols-1 gap-1">
+                                {getLecturesForSlot(day, time).map(lecture => (
+                                  <Tooltip key={lecture.id}>
+                                      <TooltipTrigger asChild>
+                                          <div
+                                            style={{ borderLeftColor: getSubjectColor(lecture.subject) }}
+                                            className={cn(
+                                              'cursor-pointer rounded-md bg-secondary/50 p-2 text-xs border-l-4 transition-all hover:bg-secondary',
+                                              lecture.status === 'canceled' && 'opacity-50 line-through'
+                                            )}
+                                          >
+                                            <p className="font-bold truncate">{lecture.subject}</p>
+                                            <p className="text-muted-foreground truncate">{lecture.teacher}</p>
+                                          </div>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <div className="space-y-1 text-sm">
+                                          <p><strong>{lecture.subject}</strong> ({lecture.code})</p>
+                                          <p><strong>Instructor:</strong> {lecture.teacher}</p>
+                                          <p><strong>Room:</strong> {lecture.classroom}</p>
+                                          <p><strong>Time:</strong> {lecture.startTime} - {lecture.endTime}</p>
+                                          <p><strong>Status:</strong> <span className="capitalize">{lecture.status}</span></p>
+                                        </div>
+                                      </TooltipContent>
+                                  </Tooltip>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                     </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-        </TooltipProvider>
+            </TooltipProvider>
+        </ScrollArea>
       </CardContent>
     </Card>
   );
