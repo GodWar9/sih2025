@@ -30,10 +30,10 @@ export default function TimetablePage() {
     if (!user) return [];
     // If student, show lectures they are enrolled in.
     if (user.role === 'student') {
-        return lectures.filter(l => l.students.some(s => s.studentId === user.id) || l.forRoles.includes(user.role));
+        return lectures.filter(l => l.students.some(s => s.studentId === user.id));
     }
     // For teachers and admins, show lectures based on their role
-    return lectures.filter(lecture => lecture.forRoles.includes(user.role));
+    return lectures.filter(lecture => lecture.forRoles.includes(user.role) || (user.role === 'teacher' && lecture.teacherId === user.id));
   }, [user, lectures]);
 
   const filteredLectures = useMemo(() => {

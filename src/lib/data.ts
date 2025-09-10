@@ -28,6 +28,24 @@ export const users: (User & { password?: string })[] = [
     avatarUrl: 'https://picsum.photos/seed/student/100/100',
     department: 'Computer Science',
   },
+   {
+    id: '4',
+    name: 'Dr. Ben Carter',
+    email: 'bcarter@classpal.com',
+    password: 'password',
+    role: 'teacher',
+    avatarUrl: 'https://picsum.photos/seed/bcarter/100/100',
+    department: 'Computer Science',
+  },
+   {
+    id: '5',
+    name: 'Dr. Olivia Chen',
+    email: 'ochen@classpal.com',
+    password: 'password',
+    role: 'teacher',
+    avatarUrl: 'https://picsum.photos/seed/ochen/100/100',
+    department: 'English',
+  },
 ];
 
 export const courses: Course[] = [
