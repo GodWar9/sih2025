@@ -8,21 +8,30 @@ import { Button } from '@/components/ui/button';
 import { BellRing, Check, Mail } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function NotificationsPage() {
-  const [notifications, setNotifications] = useState<NotificationType[]>(mockNotifications);
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    // This effect runs only on the client, after the component has mounted.
     setIsClient(true);
-    const storedNotifications = localStorage.getItem('classpal-notifications');
-    if (storedNotifications) {
-      // When retrieving from localStorage, dates are strings, so we need to parse them back to Date objects.
-      const parsedNotifications = JSON.parse(storedNotifications).map((n: NotificationType) => ({
-        ...n,
-        timestamp: new Date(n.timestamp),
-      }));
-      setNotifications(parsedNotifications);
+    try {
+        const storedNotifications = localStorage.getItem('classpal-notifications');
+        if (storedNotifications) {
+          // When retrieving from localStorage, dates are strings, so we need to parse them back to Date objects.
+          const parsedNotifications = JSON.parse(storedNotifications).map((n: NotificationType) => ({
+            ...n,
+            timestamp: new Date(n.timestamp),
+          }));
+          setNotifications(parsedNotifications);
+        } else {
+            setNotifications(mockNotifications);
+        }
+    } catch (error) {
+        console.error("Failed to process notifications from localStorage", error);
+        setNotifications(mockNotifications);
     }
   }, []);
 
@@ -37,7 +46,24 @@ export default function NotificationsPage() {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   if (!isClient) {
-    return null; // or a loading skeleton
+    // Render a skeleton loading state on the server and initial client render
+    return (
+        <div className="space-y-6">
+            <div className="flex items-center justify-between">
+                <Skeleton className="h-9 w-64" />
+                <Skeleton className="h-5 w-20" />
+            </div>
+            <Card>
+                <CardContent className="p-0">
+                    <div className="space-y-4 p-4">
+                        <Skeleton className="h-16 w-full" />
+                        <Skeleton className="h-16 w-full" />
+                        <Skeleton className="h-16 w-full" />
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
+    );
   }
 
   return (
@@ -67,7 +93,7 @@ export default function NotificationsPage() {
                       {notification.description}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {formatDistanceToNow(notification.timestamp, { addSuffix: true })}
+                      {formatDistanceToNow(new Date(notification.timestamp), { addSuffix: true })}
                     </p>
                   </div>
                   {!notification.read && (
