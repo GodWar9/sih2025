@@ -18,7 +18,7 @@ export default function NotificationsPage() {
     // This effect runs only on the client, after the component has mounted.
     setIsClient(true);
     try {
-        const storedNotifications = localStorage.getItem('classpal-notifications');
+        const storedNotifications = localStorage.getItem('classbuddy-notifications');
         if (storedNotifications) {
           // When retrieving from localStorage, dates are strings, so we need to parse them back to Date objects.
           const parsedNotifications = JSON.parse(storedNotifications).map((n: NotificationType) => ({
@@ -40,7 +40,7 @@ export default function NotificationsPage() {
       n.id === id ? { ...n, read: true } : n
     );
     setNotifications(updatedNotifications);
-    localStorage.setItem('classpal-notifications', JSON.stringify(updatedNotifications));
+    localStorage.setItem('classbuddy-notifications', JSON.stringify(updatedNotifications));
   };
   
   const unreadCount = notifications.filter(n => !n.read).length;

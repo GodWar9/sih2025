@@ -104,10 +104,10 @@ export function ScheduleLectureDialog({ teachers, courses, classrooms, setLectur
             timestamp: new Date(),
         };
 
-        const storedNotifications = JSON.parse(localStorage.getItem('classpal-notifications') || 'null');
+        const storedNotifications = JSON.parse(localStorage.getItem('classbuddy-notifications') || 'null');
         const currentNotifications = storedNotifications || mockNotifications;
         const updatedNotifications = [newNotification, ...currentNotifications];
-        localStorage.setItem('classpal-notifications', JSON.stringify(updatedNotifications));
+        localStorage.setItem('classbuddy-notifications', JSON.stringify(updatedNotifications));
 
 
     } else {

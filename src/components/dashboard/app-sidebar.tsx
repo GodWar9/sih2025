@@ -75,7 +75,7 @@ export function AppSidebar() {
             <div className="rounded-lg bg-primary p-2 text-primary-foreground">
                 <School className="h-6 w-6" />
             </div>
-            <span className="text-xl font-bold font-headline text-primary">ClassPal</span>
+            <span className="text-xl font-bold font-headline text-primary">ClassBuddy</span>
         </div>
       </SidebarHeader>
       <SidebarContent>

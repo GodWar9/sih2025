@@ -26,13 +26,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      const storedUser = localStorage.getItem('classpal-user');
+      const storedUser = localStorage.getItem('classbuddy-user');
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       }
     } catch (error) {
       console.error("Failed to parse user from localStorage", error);
-      localStorage.removeItem('classpal-user');
+      localStorage.removeItem('classbuddy-user');
     } finally {
       setLoading(false);
     }
@@ -51,12 +51,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (foundUser) {
           const { password, ...userToStore } = foundUser;
           setUser(userToStore);
-          localStorage.setItem('classpal-user', JSON.stringify(userToStore));
+          localStorage.setItem('classbuddy-user', JSON.stringify(userToStore));
           router.push('/dashboard');
           resolve(true);
         } else {
           setUser(null);
-          localStorage.removeItem('classpal-user');
+          localStorage.removeItem('classbuddy-user');
           resolve(false);
         }
         setLoading(false);
@@ -66,7 +66,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = useCallback(() => {
     setUser(null);
-    localStorage.removeItem('classpal-user');
+    localStorage.removeItem('classbuddy-user');
     router.push('/');
   }, [router]);
 

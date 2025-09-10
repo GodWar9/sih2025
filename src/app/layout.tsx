@@ -4,7 +4,7 @@ import { AuthProvider } from '@/contexts/auth-provider';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'ClassPal',
+  title: 'ClassBuddy',
   description: 'Smart Classroom & Timetable Scheduler',
 };
 
