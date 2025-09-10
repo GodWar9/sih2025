@@ -28,7 +28,6 @@ export default function ManageCoursesPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold tracking-tight font-headline">Manage Courses</h1>
-        {user?.role === 'admin' && <Button>Add New Course</Button>}
       </div>
       <Card>
         <CardHeader>
