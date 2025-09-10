@@ -58,6 +58,7 @@ export default function ManageSchedulePage() {
                     teachers={teachers} 
                     courses={courses} 
                     classrooms={classrooms}
+                    setLectures={setLectures}
                 />
              )}
             </div>
