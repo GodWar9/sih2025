@@ -10,6 +10,8 @@ import { Badge } from '@/components/ui/badge';
 import { CancelLectureDialog } from '@/components/dashboard/cancel-lecture-dialog';
 import { CheckAvailabilityDialog } from '@/components/dashboard/check-availability-dialog';
 import { ScheduleLectureDialog } from '@/components/dashboard/schedule-lecture-dialog';
+import { RescheduleLectureDialog } from '@/components/dashboard/reschedule-lecture-dialog';
+import { Button } from '@/components/ui/button';
 
 export default function ManageSchedulePage() {
   const { user } = useAuth();
@@ -49,7 +51,7 @@ export default function ManageSchedulePage() {
         <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle>Your Lectures</CardTitle>
-              <CardDescription>Review and manage your upcoming lectures. You can cancel a lecture to notify students.</CardDescription>
+              <CardDescription>Review and manage your upcoming lectures. You can cancel or reschedule lectures.</CardDescription>
             </div>
             <div className="flex gap-2">
              <CheckAvailabilityDialog />
@@ -76,7 +78,7 @@ export default function ManageSchedulePage() {
             </TableHeader>
             <TableBody>
               {manageableLectures.map((lecture) => (
-                <TableRow key={lecture.id}>
+                <TableRow key={lecture.id} className={lecture.status === 'canceled' ? 'bg-muted/50' : ''}>
                   <TableCell>
                     <div className="font-medium">{lecture.subject}</div>
                     <div className="text-sm text-muted-foreground">{lecture.code}</div>
@@ -84,10 +86,13 @@ export default function ManageSchedulePage() {
                   <TableCell className="hidden md:table-cell">{lecture.day}</TableCell>
                   <TableCell className="hidden md:table-cell">{lecture.startTime} - {lecture.endTime}</TableCell>
                   <TableCell>
-                    <Badge variant={lecture.status === 'canceled' ? 'destructive' : 'default'}>{lecture.status}</Badge>
+                    <Badge variant={lecture.status === 'canceled' ? 'secondary' : 'default'} className={lecture.status === 'canceled' ? 'text-red-500' : ''}>{lecture.status}</Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <CancelLectureDialog lecture={lecture} setLectures={setLectures} />
+                    <div className="flex items-center justify-end gap-2">
+                      <CancelLectureDialog lecture={lecture} setLectures={setLectures} />
+                      <RescheduleLectureDialog lecture={lecture} setLectures={setLectures} />
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
