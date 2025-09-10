@@ -10,9 +10,11 @@ import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 
 export default function NotificationsPage() {
-  const [notifications, setNotifications] = useState<NotificationType[]>([]);
+  const [notifications, setNotifications] = useState<NotificationType[]>(mockNotifications);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     const storedNotifications = localStorage.getItem('classpal-notifications');
     if (storedNotifications) {
       // When retrieving from localStorage, dates are strings, so we need to parse them back to Date objects.
@@ -21,8 +23,6 @@ export default function NotificationsPage() {
         timestamp: new Date(n.timestamp),
       }));
       setNotifications(parsedNotifications);
-    } else {
-      setNotifications(mockNotifications);
     }
   }, []);
 
@@ -35,6 +35,10 @@ export default function NotificationsPage() {
   };
   
   const unreadCount = notifications.filter(n => !n.read).length;
+
+  if (!isClient) {
+    return null; // or a loading skeleton
+  }
 
   return (
     <div className="space-y-6">
