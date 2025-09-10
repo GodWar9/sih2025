@@ -30,9 +30,10 @@ import { notifications as mockNotifications } from '@/lib/data';
 
 type CancelLectureDialogProps = {
   lecture: Lecture;
+  setLectures: React.Dispatch<React.SetStateAction<Lecture[]>>;
 };
 
-export function CancelLectureDialog({ lecture }: CancelLectureDialogProps) {
+export function CancelLectureDialog({ lecture, setLectures }: CancelLectureDialogProps) {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<LectureCancellationNotificationOutput | null>(null);
@@ -52,6 +53,11 @@ export function CancelLectureDialog({ lecture }: CancelLectureDialogProps) {
         setResult(response.data);
         setIsResultOpen(true);
         setOpen(false);
+
+        // Update the lecture status in the parent component's state
+        setLectures((prevLectures) => 
+            prevLectures.map(l => l.id === lecture.id ? {...l, status: 'canceled'} : l)
+        );
 
         // Create and store the notification
         const newNotification: Notification = {
@@ -99,7 +105,7 @@ export function CancelLectureDialog({ lecture }: CancelLectureDialogProps) {
             <DialogTitle>Cancel Lecture: {lecture.subject}?</DialogTitle>
             <DialogDescription>
               This will use an AI-powered tool to determine which enrolled
-              students should be notified about the cancellation.
+              students should be notified about the cancellation. The timetable will be updated.
             </DialogDescription>
           </DialogHeader>
           <div>

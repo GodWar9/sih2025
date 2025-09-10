@@ -7,6 +7,7 @@ import type { Lecture } from '@/lib/types';
 import { useState, useMemo } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { ElectiveCourses } from '@/components/dashboard/elective-courses';
+import { ManageSchedule } from '@/components/dashboard/manage-schedule';
 
 export default function TimetablePage() {
   const { user } = useAuth();

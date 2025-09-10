@@ -3,7 +3,7 @@
 import { useAuth } from '@/hooks/use-auth';
 import { lectures as allLectures, users as allUsers, courses as allCourses } from '@/lib/data';
 import type { Lecture } from '@/lib/types';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -13,15 +13,16 @@ import { ScheduleLectureDialog } from '@/components/dashboard/schedule-lecture-d
 
 export default function ManageSchedulePage() {
   const { user } = useAuth();
+  const [lectures, setLectures] = useState<Lecture[]>(allLectures);
 
   const manageableLectures = useMemo(() => {
     if (!user) return [];
-    if (user.role === 'admin') return allLectures;
+    if (user.role === 'admin') return lectures;
     if (user.role === 'teacher') {
-      return allLectures.filter((lecture) => lecture.teacherId === user.id);
+      return lectures.filter((lecture) => lecture.teacherId === user.id);
     }
     return [];
-  }, [user]);
+  }, [user, lectures]);
 
   const teachers = useMemo(() => allUsers.filter(u => u.role === 'teacher'), []);
   const courses = useMemo(() => allCourses, []);
@@ -85,7 +86,7 @@ export default function ManageSchedulePage() {
                     <Badge variant={lecture.status === 'canceled' ? 'destructive' : 'default'}>{lecture.status}</Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <CancelLectureDialog lecture={lecture} />
+                    <CancelLectureDialog lecture={lecture} setLectures={setLectures} />
                   </TableCell>
                 </TableRow>
               ))}
