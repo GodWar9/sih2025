@@ -27,6 +27,7 @@ import type { CheckAvailabilityOutput } from '@/ai/flows/check-availability';
 import { checkAvailability } from '@/lib/actions';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { ScrollArea } from '../ui/scroll-area';
 
 export function CheckAvailabilityDialog() {
   const [open, setOpen] = useState(false);
@@ -126,9 +127,9 @@ export function CheckAvailabilityDialog() {
                 The AI has identified the following available slots.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <div>
+          <ScrollArea className="h-72 w-full">
             {result && result.availableSlots.length > 0 ? (
-                 <div className="space-y-3">
+                 <div className="space-y-3 pr-4">
                     {result.availableSlots.map((slot, index) => (
                       <div key={index} className="rounded-md border p-4">
                           <p className="font-semibold">{slot.dayOfWeek}</p>
@@ -139,7 +140,7 @@ export function CheckAvailabilityDialog() {
             ) : (
                 <p>No available slots were found for the specified criteria.</p>
             )}
-          </div>
+          </ScrollArea>
           <AlertDialogFooter>
             <AlertDialogAction onClick={() => setIsResultOpen(false)}>
               Got it
