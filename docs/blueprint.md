@@ -1,4 +1,4 @@
-# **App Name**: ClassPal
+# **App Name**: ClassBuddy
 
 ## Core Features:
 
